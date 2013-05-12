@@ -1,0 +1,9 @@
+class(name,members) ::= <<
+import java.util.Map;
+import java.util.HashMap;
+class <name> {
+    public static final Map\<String,Object\> <name> = new HashMap\<String,Object\>(){{
+
+    }};
+}
+>>

@@ -1,9 +1,10 @@
 // Derived from http://json.org
 // From http://pragprog.com/titles/tpantlr2/source_code
-grammar json;
+grammar Json;
 @header {
          package json2map.grammar;
          }
+
 
 json:   object
     |   array

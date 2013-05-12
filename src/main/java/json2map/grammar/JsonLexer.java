@@ -1,4 +1,4 @@
-// Generated from /home/gautam/personal/projects/json2map/src/main/java/json2map/grammar/json.g4 by ANTLR 4.0
+// Generated from /home/gautam/personal/projects/json2map/src/main/java/json2map/grammar/Json.g4 by ANTLR 4.0
 
          package json2map.grammar;
          
@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class jsonLexer extends Lexer {
+public class JsonLexer extends Lexer {
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
@@ -34,13 +34,13 @@ public class jsonLexer extends Lexer {
 	};
 
 
-	public jsonLexer(CharStream input) {
+	public JsonLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "json.g4"; }
+	public String getGrammarFileName() { return "Json.g4"; }
 
 	@Override
 	public String[] getTokenNames() { return tokenNames; }
