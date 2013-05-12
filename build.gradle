@@ -1,0 +1,56 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.antlr:antlr4:4.0',
+            'org.antlr:ST4:4.0.7'
+
+    testCompile "junit:junit:4+"
+}
+
+def findFilesOfType(dir,endsWith){
+    def collection = []
+    dir.eachFileRecurse(groovy.io.FileType.FILES) {
+        if(it.name.endsWith(endsWith)){
+            collection.add(it.absolutePath)
+        }
+    }
+    return collection
+}
+
+task antlr4(type:JavaExec){
+    main = "org.antlr.v4.Tool"
+    def listener = true
+    def visitor = true
+    def arg = []
+    if(project.hasProperty("listener")){
+        listener = project.listener
+    }
+    if(project.hasProperty("visitor")){
+        visitor = project.visitor
+    }
+    if(listener) {
+        arg.add("-listener")
+    }else {
+        arg.add("-no-listener")
+    }
+    if(visitor) {
+        arg.add("-visitor")
+    }else{
+        arg.add("-no-visitor")
+    }
+    def g4s = project.findFilesOfType(file('src'),".g4")
+    arg += g4s
+    println "Antlr args" + arg
+
+    args = arg
+    classpath configurations.compile
+}
+
+
+compileJava {
+    it.dependsOn([antlr4])
+}
