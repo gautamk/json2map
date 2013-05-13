@@ -10,7 +10,6 @@ import org.antlr.v4.runtime.TokenStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,12 +19,9 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class Translator extends JsonBaseVisitor {
-    private static final String O = "O";
-    private final StringBuilder buffer;
-    private JSON_TYPE rootType;
+
 
     public Translator() {
-        this.buffer = new StringBuilder();
 
 
     }
@@ -42,80 +38,59 @@ public class Translator extends JsonBaseVisitor {
     }
 
     @Override
-    public Object visitPair(JsonParser.PairContext ctx) {
+    public String visitPair(JsonParser.PairContext ctx) {
         String key = ctx.key.getText();
-        buffer.append("put( "+ key );
-        visitValue(ctx.val);
-        return buffer;
+        String value = visitValue(ctx.val);
+        return key + "," + value;
     }
 
     @Override
-    public Object visitJson(JsonParser.JsonContext ctx) {
-        Object result;
-        if(ctx.obj != null){
-            rootType = JSON_TYPE.OBJECT;
-            result = visitObject(ctx.obj);
-        } else  {
-            rootType = JSON_TYPE.ARRAY;
-            result = visitArray(ctx.arr);
-        }
-        return result;
+    public String visitJson(JsonParser.JsonContext ctx) {
+        return (ctx.obj != null ? visitObject(ctx.obj) : visitArray(ctx.arr)) + ";";
     }
 
-
-
     @Override
-    public Object visitObject(JsonParser.ObjectContext ctx) {
+    public String visitObject(JsonParser.ObjectContext ctx) {
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("new HashMap<String,Object>() {{ \n");
         for (JsonParser.PairContext pair : ctx.pair()) {
-            visitPair(pair);
+            buffer.append("put(" + visitPair(pair) + ");\n");
         }
-        return buffer;
+        buffer.append("}}\n");
+        return buffer.toString();
     }
 
     @Override
-    public Object visitValueArray(JsonParser.ValueArrayContext ctx) {
-        buffer.append("new ArrayList<Object>(){{\n");
-        visitArray(ctx.arr);
-        buffer.append("}}");
-        return buffer ;
+    public String visitArray(JsonParser.ArrayContext ctx) {
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("new ArrayList<Object>(){{ \n");
+        for (JsonParser.ValueContext value : ctx.value()) {
+            buffer.append("add(" + visitValue(value) + ");\n");
+        }
+        buffer.append("}}\n");
+        return buffer.toString();
     }
-
 
     @Override
-    public Object visitValueObject(JsonParser.ValueObjectContext ctx) {
-        buffer.append("new HashMap<String,Object>{{\n");
-        visitObject(ctx.obj);
-        buffer.append("}}");
-        return buffer;
+    public String visitValueArray(JsonParser.ValueArrayContext ctx) {
+        return visitArray(ctx.arr);
     }
 
+    @Override
+    public String visitValueObject(JsonParser.ValueObjectContext ctx) {
+        return visitObject(ctx.obj);
+    }
 
-
-    private Object visitValue(JsonParser.ValueContext ctx){
-        if(rootType == JSON_TYPE.ARRAY){
-            buffer.append("add( ");
-        } else {
-            buffer.append(",");
-        }
-
-        if(ctx instanceof JsonParser.ValueArrayContext){
-            visitValueArray((JsonParser.ValueArrayContext) ctx);
-        } else
-        if(ctx instanceof JsonParser.ValueObjectContext){
-            visitValueObject((JsonParser.ValueObjectContext) ctx);
+    private String visitValue(JsonParser.ValueContext ctx) {
+        StringBuilder buffer = new StringBuilder();
+        if (ctx instanceof JsonParser.ValueArrayContext) {
+            buffer.append(visitValueArray((JsonParser.ValueArrayContext) ctx));
+        } else if (ctx instanceof JsonParser.ValueObjectContext) {
+            buffer.append(visitValueObject((JsonParser.ValueObjectContext) ctx));
         } else {
             buffer.append(ctx.getText());
         }
-        buffer.append(" );\n");
-        return buffer;
-    }
-
-    @Override
-    public Object visitArray(JsonParser.ArrayContext ctx) {
-        for (JsonParser.ValueContext value: ctx.value()) {
-            visitValue(value);
-        }
-        return buffer;
+        return buffer.toString();
     }
 
     public String translate(String json) throws IOException {
@@ -128,12 +103,8 @@ public class Translator extends JsonBaseVisitor {
 
     public String translate(ANTLRInputStream stream) {
         final CommonTokenStream lex = lex(stream);
-        visitJson(parse(lex));
-        return buffer.toString();
+        return visitJson(parse(lex));
     }
 
-    private static enum JSON_TYPE {
-        ARRAY,
-        OBJECT
-    }
+
 }
