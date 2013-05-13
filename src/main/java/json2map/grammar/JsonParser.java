@@ -46,6 +46,8 @@ public class JsonParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class JsonContext extends ParserRuleContext {
+		public ObjectContext obj;
+		public ArrayContext arr;
 		public ObjectContext object() {
 			return getRuleContext(ObjectContext.class,0);
 		}
@@ -80,13 +82,13 @@ public class JsonParser extends Parser {
 			case 2:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(10); object();
+				setState(10); ((JsonContext)_localctx).obj = object();
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(11); array();
+				setState(11); ((JsonContext)_localctx).arr = array();
 				}
 				break;
 			default:
@@ -305,29 +307,135 @@ public class JsonParser extends Parser {
 	}
 
 	public static class ValueContext extends ParserRuleContext {
-		public ObjectContext object() {
-			return getRuleContext(ObjectContext.class,0);
-		}
-		public TerminalNode STRING() { return getToken(JsonParser.STRING, 0); }
-		public ArrayContext array() {
-			return getRuleContext(ArrayContext.class,0);
-		}
-		public TerminalNode NUMBER() { return getToken(JsonParser.NUMBER, 0); }
 		public ValueContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_value; }
+	 
+		public ValueContext() { }
+		public void copyFrom(ValueContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class ValueArrayContext extends ValueContext {
+		public ArrayContext arr;
+		public ArrayContext array() {
+			return getRuleContext(ArrayContext.class,0);
+		}
+		public ValueArrayContext(ValueContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof JsonListener ) ((JsonListener)listener).enterValue(this);
+			if ( listener instanceof JsonListener ) ((JsonListener)listener).enterValueArray(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof JsonListener ) ((JsonListener)listener).exitValue(this);
+			if ( listener instanceof JsonListener ) ((JsonListener)listener).exitValueArray(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JsonVisitor ) return ((JsonVisitor<? extends T>)visitor).visitValue(this);
+			if ( visitor instanceof JsonVisitor ) return ((JsonVisitor<? extends T>)visitor).visitValueArray(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ValueNullContext extends ValueContext {
+		public ValueNullContext(ValueContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof JsonListener ) ((JsonListener)listener).enterValueNull(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof JsonListener ) ((JsonListener)listener).exitValueNull(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JsonVisitor ) return ((JsonVisitor<? extends T>)visitor).visitValueNull(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ValueNumberContext extends ValueContext {
+		public TerminalNode NUMBER() { return getToken(JsonParser.NUMBER, 0); }
+		public ValueNumberContext(ValueContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof JsonListener ) ((JsonListener)listener).enterValueNumber(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof JsonListener ) ((JsonListener)listener).exitValueNumber(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JsonVisitor ) return ((JsonVisitor<? extends T>)visitor).visitValueNumber(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ValueObjectContext extends ValueContext {
+		public ObjectContext obj;
+		public ObjectContext object() {
+			return getRuleContext(ObjectContext.class,0);
+		}
+		public ValueObjectContext(ValueContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof JsonListener ) ((JsonListener)listener).enterValueObject(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof JsonListener ) ((JsonListener)listener).exitValueObject(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JsonVisitor ) return ((JsonVisitor<? extends T>)visitor).visitValueObject(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ValueStringContext extends ValueContext {
+		public TerminalNode STRING() { return getToken(JsonParser.STRING, 0); }
+		public ValueStringContext(ValueContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof JsonListener ) ((JsonListener)listener).enterValueString(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof JsonListener ) ((JsonListener)listener).exitValueString(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JsonVisitor ) return ((JsonVisitor<? extends T>)visitor).visitValueString(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ValueTrueContext extends ValueContext {
+		public ValueTrueContext(ValueContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof JsonListener ) ((JsonListener)listener).enterValueTrue(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof JsonListener ) ((JsonListener)listener).exitValueTrue(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JsonVisitor ) return ((JsonVisitor<? extends T>)visitor).visitValueTrue(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ValueFalseContext extends ValueContext {
+		public ValueFalseContext(ValueContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof JsonListener ) ((JsonListener)listener).enterValueFalse(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof JsonListener ) ((JsonListener)listener).exitValueFalse(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JsonVisitor ) return ((JsonVisitor<? extends T>)visitor).visitValueFalse(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -339,42 +447,49 @@ public class JsonParser extends Parser {
 			setState(55);
 			switch (_input.LA(1)) {
 			case STRING:
+				_localctx = new ValueStringContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(48); match(STRING);
 				}
 				break;
 			case NUMBER:
+				_localctx = new ValueNumberContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(49); match(NUMBER);
 				}
 				break;
 			case 2:
+				_localctx = new ValueObjectContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(50); object();
+				setState(50); ((ValueObjectContext)_localctx).obj = object();
 				}
 				break;
 			case 5:
+				_localctx = new ValueArrayContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(51); array();
+				setState(51); ((ValueArrayContext)_localctx).arr = array();
 				}
 				break;
 			case 9:
+				_localctx = new ValueTrueContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(52); match(9);
 				}
 				break;
 			case 7:
+				_localctx = new ValueFalseContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
 				setState(53); match(7);
 				}
 				break;
 			case 3:
+				_localctx = new ValueNullContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
 				setState(54); match(3);

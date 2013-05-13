@@ -9,17 +9,35 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
 public class JsonBaseListener implements JsonListener {
+	@Override public void enterValueArray(JsonParser.ValueArrayContext ctx) { }
+	@Override public void exitValueArray(JsonParser.ValueArrayContext ctx) { }
+
+	@Override public void enterValueNull(JsonParser.ValueNullContext ctx) { }
+	@Override public void exitValueNull(JsonParser.ValueNullContext ctx) { }
+
+	@Override public void enterValueNumber(JsonParser.ValueNumberContext ctx) { }
+	@Override public void exitValueNumber(JsonParser.ValueNumberContext ctx) { }
+
+	@Override public void enterValueObject(JsonParser.ValueObjectContext ctx) { }
+	@Override public void exitValueObject(JsonParser.ValueObjectContext ctx) { }
+
 	@Override public void enterPair(JsonParser.PairContext ctx) { }
 	@Override public void exitPair(JsonParser.PairContext ctx) { }
 
 	@Override public void enterJson(JsonParser.JsonContext ctx) { }
 	@Override public void exitJson(JsonParser.JsonContext ctx) { }
 
-	@Override public void enterValue(JsonParser.ValueContext ctx) { }
-	@Override public void exitValue(JsonParser.ValueContext ctx) { }
+	@Override public void enterValueString(JsonParser.ValueStringContext ctx) { }
+	@Override public void exitValueString(JsonParser.ValueStringContext ctx) { }
 
 	@Override public void enterObject(JsonParser.ObjectContext ctx) { }
 	@Override public void exitObject(JsonParser.ObjectContext ctx) { }
+
+	@Override public void enterValueFalse(JsonParser.ValueFalseContext ctx) { }
+	@Override public void exitValueFalse(JsonParser.ValueFalseContext ctx) { }
+
+	@Override public void enterValueTrue(JsonParser.ValueTrueContext ctx) { }
+	@Override public void exitValueTrue(JsonParser.ValueTrueContext ctx) { }
 
 	@Override public void enterArray(JsonParser.ArrayContext ctx) { }
 	@Override public void exitArray(JsonParser.ArrayContext ctx) { }
